@@ -12,7 +12,19 @@ const puppeteer = require("puppeteer");
   headings = await page.evaluate(() => {
     headings_elements = document.querySelectorAll(".ads__unit > .ads__unit__content");
     headings_array = Array.from(headings_elements);
-    return headings_array.map(heading => heading.textContent);
+
+    cars = headings_array.map(car => ({
+      Name: car.querySelector('h2').textContent,
+      place: car.querySelector(".ads__unit__content__details").textContent,
+      year: car.querySelector(".ads__unit__content__keys div").textContent,
+      km: car.querySelector(".ads__unit__content__keys div").nextElementSibling.textContent,
+      price: car.querySelector(".ads__unit__content__keys div").nextElementSibling.nextElementSibling.textContent,
+      owner: car.querySelector(".ads__unit__content__list").textContent,
+      mics: car.querySelector(".ads__unit__content__list").nextElementSibling ? car.querySelector(".ads__unit__content__list").nextElementSibling.textContent : "Undefined",
+    }))
+
+
+    return cars;
   });
   console.log(headings);
   await browser.close();
